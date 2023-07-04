@@ -99,6 +99,10 @@ class App(ctk.CTk):
         ).pack(side="top")
 
         self.thickness_entry.pack()
+
+        self.info_label = ctk.CTkLabel(master=toolbar, text="Все хорошо!", width=512)
+        self.info_label.pack(side="right")
+
         check_data_thread.start()
 
     def open_f(self, path=None):
@@ -221,13 +225,20 @@ class App(ctk.CTk):
         }
         while True:
             time.sleep(0.2)
+            all_good = True
             for k, v in d.items():
                 if k.get() != "" and not (self.type_test(v, k.get())):
                     k.configure(border_color="red")
-                    k.pack()
+
+                    all_good = False
+
                 else:
                     k.configure(border_color="#909090")
-                    k.pack()
+
+            if not all_good:
+                self.info_label.configure(text="Проверьте введенные данные!", fg_color="red")
+            else:
+                self.info_label.configure(text="Все хорошо!", fg_color="#323232")
 
     def on_button_press(self, event):
         """Нажатие лкм
